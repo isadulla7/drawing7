@@ -4,6 +4,6 @@ import android.view.MotionEvent
 
 interface ShapeBuilder {
     fun onTouchEvent(event: MotionEvent): Boolean
-    fun build(): Shape?
+    fun build(event: MotionEvent): Shape?
     fun reset()
 }

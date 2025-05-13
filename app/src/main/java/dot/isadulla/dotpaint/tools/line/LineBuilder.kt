@@ -1,29 +1,38 @@
 package dot.isadulla.dotpaint.tools.line
 
+import android.util.Log
 import android.view.MotionEvent
 import dot.isadulla.dotpaint.api.shape.ShapeBuilder
 
-class LineBuilder : dot.isadulla.dotpaint.api.shape.ShapeBuilder {
+class LineBuilder : ShapeBuilder {
     private var startX = 0f
     private var startY = 0f
     private var endX = 0f
     private var endY = 0f
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
+        return when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
                 startY = event.y
+                true
             }
+
             MotionEvent.ACTION_MOVE, MotionEvent.ACTION_UP -> {
-                endX = event.x
-                endY = event.y
+                LineShape(startX, startY, event.x, event.y)
+                true
             }
+
+            else -> true
         }
-        return true
     }
 
-    override fun build(): LineShape {
+    override fun build(event: MotionEvent): LineShape {
+        Log.d(
+            "LineBuilder",
+            "Action: ${event.action}, start=($startX, $startY), end=(${event.x}, ${event.y})"
+        )
+
         return LineShape(startX, startY, endX, endY)
     }
 

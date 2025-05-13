@@ -10,13 +10,9 @@ class LineShape(
     val startY: Float,
     val endX: Float,
     val endY: Float
-) : dot.isadulla.dotpaint.api.shape.Shape {
+) : Shape {
 
     override val id: String = UUID.randomUUID().toString()
-
-    override fun draw(painter: dot.isadulla.dotpaint.api.shape.ShapePainter) {
-        painter.drawShape(canvas = null, shape = this) // canvas is passed from engine
-    }
 
     override fun contains(x: Float, y: Float): Boolean {
         // Simple hit test: bounding box check

@@ -8,14 +8,14 @@ class UndoManager : UndoController {
     private val redoStack = ArrayDeque<DrawingAction>()
 
     override fun addAction(action: DrawingAction) {
-        undoStack.addLast(action)
+        undoStack.add(action)
         redoStack.clear()
     }
 
     override fun undo(): DrawingAction? {
         val action = undoStack.removeLastOrNull()
         if (action != null) {
-            redoStack.addLast(action)
+            redoStack.add(action)
         }
         return action
     }
@@ -23,7 +23,7 @@ class UndoManager : UndoController {
     override fun redo(): DrawingAction? {
         val action = redoStack.removeLastOrNull()
         if (action != null) {
-            undoStack.addLast(action)
+            undoStack.add(action)
         }
         return action
     }
