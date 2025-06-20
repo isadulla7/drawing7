@@ -21,3 +21,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "DotPaint"
 include(":app")
+include(":presentation")
+include(":domain")
+include(":data")
+include(":tools")
+include(":common")
+include(":di")
