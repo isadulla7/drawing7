@@ -1,16 +1,16 @@
 package dot.isaulla.tools
 
-import dot.isadulla.domain.ToolType
+import dot.isadulla.presentation.ToolType
 
 object ToolsFactory {
     fun createTool(toolType: ToolType): Tool {
         return when (toolType) {
-            ToolType.PENCIL -> PencilTool()
-            ToolType.ERASER -> EraserTool()
-            ToolType.LINE -> LineTool()
-            ToolType.RECTANGLE -> RectangleTool()
-            ToolType.CIRCLE -> CircleTool()
-            ToolType.FILL -> FillTool()
+           ToolType.PENCIL -> PencilTool()
+           ToolType.ERASER -> EraserTool()
+           ToolType.LINE -> LineTool()
+           ToolType.RECTANGLE -> RectangleTool()
+           ToolType.CIRCLE -> CircleTool()
+           ToolType.FILL -> FillTool()
         }
     }
 }

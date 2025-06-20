@@ -3,7 +3,8 @@ package dot.isadulla.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dot.isadulla.domain.ToolType
+import com.example.presentation.R
+import dot.isadulla.data.models.ToolUiModel
 import dot.isaulla.tools.ToolsFactory
 
 class DrawViewModel : ViewModel() {
@@ -24,5 +25,16 @@ class DrawViewModel : ViewModel() {
 
     fun setStrokeWidth(width: Float) {
         _drawState.value = _drawState.value?.copy(strokeWidth = width)
+    }
+
+    fun getToolUiList(): List<ToolUiModel> {
+        return listOf(
+            ToolUiModel(ToolType.PENCIL, "Pencil", R.drawable.pen),
+            ToolUiModel(ToolType.CIRCLE, "Circle", R.drawable.circle),
+            ToolUiModel(ToolType.RECTANGLE, "Rectangle", R.drawable.rectangle),
+            ToolUiModel(ToolType.FILL, "Fill Color", R.drawable.color),
+            ToolUiModel(ToolType.LINE, "Line", R.drawable.line),
+            ToolUiModel(ToolType.ERASER, "Eraser", R.drawable.eraser),
+        )
     }
 }

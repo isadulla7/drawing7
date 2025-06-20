@@ -35,5 +35,6 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":common"))
+    implementation(project(":presentation"))
     implementation(libs.kotlinx.coroutines.android)
 }

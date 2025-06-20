@@ -4,5 +4,8 @@ import android.graphics.Canvas
 import android.view.MotionEvent
 
 interface Tool {
-    fun onTouchEvent(event: MotionEvent, canvas: Canvas)
+    fun onPreview(event: MotionEvent, canvas: Canvas)
+    fun onCommit(canvas: Canvas)
+    fun setColor(color: Int) {}
+    fun setStrokeWidth(width: Float) {}
 }

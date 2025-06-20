@@ -11,16 +11,15 @@ class FillTool(
         color = 0xFF000000.toInt() // Qora rang
     }
 ) : Tool {
-    override fun onTouchEvent(event: MotionEvent, canvas: Canvas) {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                // Butun canvasni to'ldirish (kelajakda nuqtadan to'ldirish qo'shiladi)
-                canvas.drawPaint(paint)
-            }
-        }
+    override fun onPreview(event: MotionEvent, canvas: Canvas) {
+        // FillTool uchun preview kerak emas
     }
 
-    fun setColor(color: Int) {
+    override fun onCommit(canvas: Canvas) {
+        canvas.drawPaint(paint)
+    }
+
+    override fun setColor(color: Int) {
         paint.color = color
     }
 }

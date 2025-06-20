@@ -17,42 +17,35 @@ class RectangleTool(
 ) : Tool {
     private var startX = 0f
     private var startY = 0f
+    private var endX = 0f
+    private var endY = 0f
     private var rect = RectF()
 
-    override fun onTouchEvent(event: MotionEvent, canvas: Canvas) {
+    override fun onPreview(event: MotionEvent, canvas: Canvas) {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
                 startY = event.y
             }
-
             MotionEvent.ACTION_MOVE -> {
-                rect.set(
-                    min(startX, event.x),
-                    min(startY, event.y),
-                    max(startX, event.x),
-                    max(startY, event.y)
-                )
-                canvas.drawRect(rect, paint)
-            }
-
-            MotionEvent.ACTION_UP -> {
-                rect.set(
-                    min(startX, event.x),
-                    min(startY, event.y),
-                    max(startX, event.x),
-                    max(startY, event.y)
-                )
+                endX = event.x
+                endY = event.y
+                rect.set(min(startX, endX), min(startY, endY), max(startX, endX), max(startY, endY))
                 canvas.drawRect(rect, paint)
             }
         }
     }
 
-    fun setColor(color: Int) {
+    override fun onCommit(canvas: Canvas) {
+        rect.set(min(startX, endX), min(startY, endY), max(startX, endX), max(startY, endY))
+        canvas.drawRect(rect, paint)
+    }
+
+    override fun setColor(color: Int) {
         paint.color = color
     }
 
-    fun setStrokeWidth(width: Float) {
+    override fun setStrokeWidth(width: Float) {
         paint.strokeWidth = width
     }
 }

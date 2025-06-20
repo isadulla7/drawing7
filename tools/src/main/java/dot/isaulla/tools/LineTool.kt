@@ -18,40 +18,40 @@ class LineTool(
     private var startY = 0f
     private var endX = 0f
     private var endY = 0f
-    private val path = Path()
+    private var path = Path()
 
-    override fun onTouchEvent(event: MotionEvent, canvas: Canvas) {
+    override fun onPreview(event: MotionEvent, canvas: Canvas) {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
                 startY = event.y
-                path.reset()
+                path = Path()
+                path.moveTo(startX, startY)
             }
+
             MotionEvent.ACTION_MOVE -> {
                 endX = event.x
                 endY = event.y
-                drawLine(canvas)
-            }
-            MotionEvent.ACTION_UP -> {
-                endX = event.x
-                endY = event.y
-                drawLine(canvas)
+                path.reset()
+                path.moveTo(startX, startY)
+                path.lineTo(endX, endY)
+                canvas.drawPath(path, paint)
             }
         }
     }
 
-    private fun drawLine(canvas: Canvas) {
+    override fun onCommit(canvas: Canvas) {
         path.reset()
         path.moveTo(startX, startY)
         path.lineTo(endX, endY)
         canvas.drawPath(path, paint)
     }
 
-    fun setColor(color: Int) {
+    override fun setColor(color: Int) {
         paint.color = color
     }
 
-    fun setStrokeWidth(width: Float) {
+    override fun setStrokeWidth(width: Float) {
         paint.strokeWidth = width
     }
 }

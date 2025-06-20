@@ -1,7 +1,6 @@
 package dot.isadulla.presentation
 
 import android.graphics.Path
-import dot.isadulla.domain.ToolType
 import dot.isaulla.tools.PencilTool
 import dot.isaulla.tools.Tool
 

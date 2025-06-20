@@ -13,30 +13,37 @@ class PencilTool(
         color = 0xFF000000.toInt() // Qora rang
     }
 ) : Tool {
-    private val path = Path()
+    private var path = Path()
+    private var isDrawing = false
 
-    override fun onTouchEvent(event: MotionEvent, canvas: Canvas) {
+    override fun onPreview(event: MotionEvent, canvas: Canvas) {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                path.reset()
                 path.moveTo(event.x, event.y)
+                isDrawing = true
             }
-
             MotionEvent.ACTION_MOVE -> {
-                path.lineTo(event.x, event.y)
-                canvas.drawPath(path, paint)
-            }
-
-            MotionEvent.ACTION_UP -> {
-                // Chizish tugadi
+                if (isDrawing) {
+                    path.lineTo(event.x, event.y)
+                    canvas.drawPath(path, paint)
+                }
             }
         }
     }
 
-    fun setColor(color: Int) {
+    override fun onCommit(canvas: Canvas) {
+        if (isDrawing) {
+            canvas.drawPath(path, paint)
+            isDrawing = false
+        }
+    }
+
+    override fun setColor(color: Int) {
         paint.color = color
     }
 
-    fun setStrokeWidth(width: Float) {
+    override fun setStrokeWidth(width: Float) {
         paint.strokeWidth = width
     }
 }

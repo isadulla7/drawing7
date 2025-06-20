@@ -18,7 +18,7 @@ class CircleTool(
     private var endX = 0f
     private var endY = 0f
 
-    override fun onTouchEvent(event: MotionEvent, canvas: Canvas) {
+    override fun onPreview(event: MotionEvent, canvas: Canvas) {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
@@ -27,28 +27,26 @@ class CircleTool(
             MotionEvent.ACTION_MOVE -> {
                 endX = event.x
                 endY = event.y
-                drawCircle(canvas)
-            }
-            MotionEvent.ACTION_UP -> {
-                endX = event.x
-                endY = event.y
-                drawCircle(canvas)
+                val radius = hypot((endX - startX).toDouble(), (endY - startY).toDouble()).toFloat() / 2
+                val centerX = (startX + endX) / 2
+                val centerY = (startY + endY) / 2
+                canvas.drawCircle(centerX, centerY, radius, paint)
             }
         }
     }
 
-    private fun drawCircle(canvas: Canvas) {
+    override fun onCommit(canvas: Canvas) {
         val radius = hypot((endX - startX).toDouble(), (endY - startY).toDouble()).toFloat() / 2
         val centerX = (startX + endX) / 2
         val centerY = (startY + endY) / 2
         canvas.drawCircle(centerX, centerY, radius, paint)
     }
 
-    fun setColor(color: Int) {
+    override fun setColor(color: Int) {
         paint.color = color
     }
 
-    fun setStrokeWidth(width: Float) {
+    override fun setStrokeWidth(width: Float) {
         paint.strokeWidth = width
     }
 }
