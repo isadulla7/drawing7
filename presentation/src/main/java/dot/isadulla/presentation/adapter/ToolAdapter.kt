@@ -7,8 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.presentation.R
-import dot.isadulla.data.models.ToolUiModel
-import dot.isadulla.presentation.ToolType
+import dot.isadulla.presentation.ToolUiModel
+import dot.isaulla.tools.ToolType
 
 class ToolAdapter (private val tools: List<ToolUiModel>,
                    private val onToolSelected: (ToolType) -> Unit

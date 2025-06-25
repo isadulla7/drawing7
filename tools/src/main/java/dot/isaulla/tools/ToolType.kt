@@ -1,4 +1,4 @@
-package dot.isadulla.presentation
+package dot.isaulla.tools
 
 enum class ToolType {
     PENCIL,

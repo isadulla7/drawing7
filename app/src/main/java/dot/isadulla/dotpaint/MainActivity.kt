@@ -3,10 +3,7 @@ package dot.isadulla.dotpaint
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import dot.isadulla.presentation.ToolType
 import dot.isadulla.dotpaint.databinding.ActivityMainBinding
 import dot.isadulla.presentation.DrawViewModel
 import dot.isadulla.presentation.adapter.ToolAdapter
@@ -29,6 +26,12 @@ class MainActivity : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.adapter = ToolAdapter(tools) { selectedToolType ->
             viewModel.setToolType(selectedToolType)
+        }
+
+        binding.changeMode.setOnClickListener {
+            val newMode = !viewModel.isSelectionMode // viewModel orqali boshqarish
+            viewModel.setSelectionMode(newMode)
+            binding.drawCanvasView.setSelectionMode(newMode)
         }
         // Namuna: Vosita tanlash tugmalari
 //        binding.btnPencil.setOnClickListener { viewModel.setToolType(ToolType.PENCIL) }

@@ -1,9 +1,10 @@
-package dot.isaulla.tools
+package dot.isadulla.presentation
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.view.MotionEvent
+import dot.isaulla.tools.Tool
 import kotlin.math.max
 import kotlin.math.min
 
@@ -47,5 +48,36 @@ class RectangleTool(
 
     override fun setStrokeWidth(width: Float) {
         paint.strokeWidth = width
+    }
+
+    override fun getBounds(): RectF = RectF(rect).apply {
+        inset(-paint.strokeWidth / 2, -paint.strokeWidth / 2)
+    }
+
+    override fun resize(newBounds: RectF) {
+        rect.set(newBounds)
+        startX = newBounds.left
+        startY = newBounds.top
+        endX = newBounds.right
+        endY = newBounds.bottom
+    }
+
+    override fun clone(): Tool {
+        val newPaint = Paint().apply { set(paint) }
+        return RectangleTool(newPaint).apply {
+            startX = this@RectangleTool.startX
+            startY = this@RectangleTool.startY
+            endX = this@RectangleTool.endX
+            endY = this@RectangleTool.endY
+            rect.set(this@RectangleTool.rect)
+        }
+    }
+
+    override fun move(dx: Float, dy: Float) {
+        rect.offset(dx, dy)
+        startX += dx
+        startY += dy
+        endX += dx
+        endY += dy
     }
 }

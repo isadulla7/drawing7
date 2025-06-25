@@ -35,10 +35,9 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":common"))
-    implementation(project(":tools"))
-    implementation(project(":data"))
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.material)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(project(":tools"))
 }

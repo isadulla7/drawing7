@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":common"))
+
     implementation(libs.kotlinx.coroutines.android)
 }

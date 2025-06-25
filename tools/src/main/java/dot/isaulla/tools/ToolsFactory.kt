@@ -1,6 +1,11 @@
 package dot.isaulla.tools
 
-import dot.isadulla.presentation.ToolType
+import dot.isadulla.presentation.CircleTool
+import dot.isadulla.presentation.EraserTool
+import dot.isadulla.presentation.FillTool
+import dot.isadulla.presentation.PencilTool
+import dot.isadulla.presentation.RectangleTool
+
 
 object ToolsFactory {
     fun createTool(toolType: ToolType): Tool {

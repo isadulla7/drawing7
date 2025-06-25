@@ -3,6 +3,7 @@ package dot.isaulla.tools
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.RectF
 import android.view.MotionEvent
 
 
@@ -53,5 +54,38 @@ class LineTool(
 
     override fun setStrokeWidth(width: Float) {
         paint.strokeWidth = width
+    }
+    override fun getBounds(): RectF = RectF(
+        minOf(startX, endX) - paint.strokeWidth / 2,
+        minOf(startY, endY) - paint.strokeWidth / 2,
+        maxOf(startX, endX) + paint.strokeWidth / 2,
+        maxOf(startY, endY) + paint.strokeWidth / 2
+    )
+    override fun resize(newBounds: RectF) {
+        startX = newBounds.left
+        startY = newBounds.top
+        endX = newBounds.right
+        endY = newBounds.bottom
+        path.reset()
+        path.moveTo(startX, startY)
+        path.lineTo(endX, endY)
+    }
+
+    override fun clone(): Tool {
+        val newPaint = Paint().apply { set(paint) }
+        return LineTool(newPaint).apply {
+            startX = this@LineTool.startX
+            startY = this@LineTool.startY
+            endX = this@LineTool.endX
+            endY = this@LineTool.endY
+            path = Path(this@LineTool.path)
+        }
+    }
+    override fun move(dx: Float, dy: Float) {
+        startX += dx
+        startY += dy
+        endX += dx
+        endY += dy
+        path.offset(dx, dy)
     }
 }

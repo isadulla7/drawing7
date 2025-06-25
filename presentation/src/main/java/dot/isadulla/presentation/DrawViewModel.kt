@@ -4,13 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.presentation.R
-import dot.isadulla.data.models.ToolUiModel
+import dot.isaulla.tools.ToolType
 import dot.isaulla.tools.ToolsFactory
 
 class DrawViewModel : ViewModel() {
     private val _drawState = MutableLiveData(DrawState())
     val drawState: LiveData<DrawState> = _drawState
+    private var _isSelectionMode = false
+    val isSelectionMode: Boolean get() = _isSelectionMode
 
+    fun setSelectionMode(enabled: Boolean) {
+        _isSelectionMode = enabled
+    }
     fun setToolType(toolType: ToolType) {
         val newTool = ToolsFactory.createTool(toolType)
         _drawState.value = _drawState.value?.copy(

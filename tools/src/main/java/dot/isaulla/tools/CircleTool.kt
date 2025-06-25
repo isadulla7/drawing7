@@ -1,8 +1,10 @@
-package dot.isaulla.tools
+package dot.isadulla.presentation
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.RectF
 import android.view.MotionEvent
+import dot.isaulla.tools.Tool
 import kotlin.math.hypot
 
 class CircleTool(
@@ -48,5 +50,40 @@ class CircleTool(
 
     override fun setStrokeWidth(width: Float) {
         paint.strokeWidth = width
+    }
+
+    override fun getBounds(): RectF {
+        val radius = hypot((endX - startX).toDouble(), (endY - startY).toDouble()).toFloat() / 2
+        val centerX = (startX + endX) / 2
+        val centerY = (startY + endY) / 2
+        return RectF(
+            centerX - radius - paint.strokeWidth / 2,
+            centerY - radius - paint.strokeWidth / 2,
+            centerX + radius + paint.strokeWidth / 2,
+            centerY + radius + paint.strokeWidth / 2
+        )
+    }
+
+    override fun resize(newBounds: RectF) {
+        startX = newBounds.left
+        startY = newBounds.top
+        endX = newBounds.right
+        endY = newBounds.bottom
+    }
+
+    override fun clone(): Tool {
+        val newPaint = Paint().apply { set(paint) }
+        return CircleTool(newPaint).apply {
+            startX = this@CircleTool.startX
+            startY = this@CircleTool.startY
+            endX = this@CircleTool.endX
+            endY = this@CircleTool.endY
+        }
+    }
+    override fun move(dx: Float, dy: Float) {
+        startX += dx
+        startY += dy
+        endX += dx
+        endY += dy
     }
 }

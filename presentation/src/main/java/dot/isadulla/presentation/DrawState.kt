@@ -1,8 +1,8 @@
 package dot.isadulla.presentation
 
 import android.graphics.Path
-import dot.isaulla.tools.PencilTool
 import dot.isaulla.tools.Tool
+import dot.isaulla.tools.ToolType
 
 data class DrawState(
     val currentToolType: ToolType = ToolType.PENCIL,
