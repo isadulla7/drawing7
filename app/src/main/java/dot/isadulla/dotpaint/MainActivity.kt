@@ -21,6 +21,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.drawState.observe(this) { state ->
             binding.drawCanvasView.setDrawState(state)
         }
+
+        viewModel.isSelectionMode.observe(this) { mode ->
+            binding.drawCanvasView.setSelectionMode(mode)
+        }
+
         val tools = viewModel.getToolUiList()
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -28,11 +33,11 @@ class MainActivity : AppCompatActivity() {
             viewModel.setToolType(selectedToolType)
         }
 
-        binding.changeMode.setOnClickListener {
-            val newMode = !viewModel.isSelectionMode // viewModel orqali boshqarish
-            viewModel.setSelectionMode(newMode)
-            binding.drawCanvasView.setSelectionMode(newMode)
-        }
+//        binding.changeMode.setOnClickListener {
+//            val newMode = !viewModel.isSelectionMode // viewModel orqali boshqarish
+//            viewModel.setSelectionMode(newMode)
+//            binding.drawCanvasView.setSelectionMode(newMode)
+//        }
         // Namuna: Vosita tanlash tugmalari
 //        binding.btnPencil.setOnClickListener { viewModel.setToolType(ToolType.PENCIL) }
 //        binding.btnEraser.setOnClickListener { viewModel.setToolType(ToolType.ERASER) }

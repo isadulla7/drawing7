@@ -10,9 +10,10 @@ import com.example.presentation.R
 import dot.isadulla.presentation.ToolUiModel
 import dot.isaulla.tools.ToolType
 
-class ToolAdapter (private val tools: List<ToolUiModel>,
-                   private val onToolSelected: (ToolType) -> Unit
+class ToolAdapter(
+    private val tools: List<ToolUiModel>, private val onToolSelected: (ToolType) -> Unit
 ) : RecyclerView.Adapter<ToolAdapter.ToolViewHolder>() {
+    private var selectedToolType: ToolType? = null // Tanlangan tool
 
     inner class ToolViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val icon: ImageView = view.findViewById(R.id.toolIcon)
@@ -28,7 +29,17 @@ class ToolAdapter (private val tools: List<ToolUiModel>,
         val tool = tools[position]
         holder.icon.setImageResource(tool.iconResId)
         holder.name.text = tool.name
+
+        holder.view.setBackgroundResource(
+            if (tool.type == selectedToolType) R.drawable.selected_tool_background
+            else R.drawable.default_tool_background
+        )
+
         holder.view.setOnClickListener {
+            val oldPosition = tools.indexOfFirst { it.type == selectedToolType }
+            selectedToolType = tool.type
+            notifyItemChanged(oldPosition)
+            notifyItemChanged(position)
             onToolSelected(tool.type)
         }
     }

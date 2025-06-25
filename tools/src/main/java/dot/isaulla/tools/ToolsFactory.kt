@@ -8,7 +8,7 @@ import dot.isadulla.presentation.RectangleTool
 
 
 object ToolsFactory {
-    fun createTool(toolType: ToolType): Tool {
+    fun createTool(toolType: ToolType): Tool? {
         return when (toolType) {
            ToolType.PENCIL -> PencilTool()
            ToolType.ERASER -> EraserTool()
@@ -16,6 +16,7 @@ object ToolsFactory {
            ToolType.RECTANGLE -> RectangleTool()
            ToolType.CIRCLE -> CircleTool()
            ToolType.FILL -> FillTool()
+           ToolType.SELECTION -> null
         }
     }
 }

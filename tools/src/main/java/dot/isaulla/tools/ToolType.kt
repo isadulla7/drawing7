@@ -6,5 +6,6 @@ enum class ToolType {
     LINE,
     RECTANGLE,
     CIRCLE,
-    FILL
+    FILL,
+    SELECTION
 }

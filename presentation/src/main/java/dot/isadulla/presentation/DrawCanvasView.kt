@@ -46,6 +46,16 @@ class DrawCanvasView @JvmOverloads constructor(
     private var resizingCorner: Int? =
         null // 0: top-left, 1: top-right, 2: bottom-right, 3: bottom-left
     private val cornerRadius = 16f // Burchak nuqtalarining kengligini oshirish
+    private val selectionPadding = 10f // Ramkani shakldan uzoqlashtirish masofasi
+    private val deleteButtonRadius = 12f // O‘chirish tugmasi radiusi
+    private val deleteButtonPaint = Paint().apply {
+        isAntiAlias = true
+        style = Paint.Style.FILL
+        color = Color.BLUE // Tugma rangi (o‘zgartirish mumkin)
+    }
+    private var deleteButtonX = 0f // Tugma markazi X
+    private var deleteButtonY = 0f // Tugma markazi Y
+
     private val selectionPaint = Paint().apply {
         isAntiAlias = true
         style = Paint.Style.STROKE
@@ -79,13 +89,23 @@ class DrawCanvasView @JvmOverloads constructor(
 
         // Tanlangan shaklni uzuk-uzuk to‘rtburchak va burchak nuqtalari bilan chizish
         selectedShape?.let { shape ->
-            canvas.drawRect(shape.bounds, selectionPaint)
-            // Burchak nuqtalari
+            val paddedBounds = RectF(shape.bounds).apply {
+                inset(-selectionPadding, -selectionPadding) // Tashqariga kengaytirish
+            }
+            canvas.drawRect(paddedBounds, selectionPaint)            // Burchak nuqtalari
             with(shape.bounds) {
                 canvas.drawCircle(left, top, cornerRadius, cornerPaint) // Top-left
                 canvas.drawCircle(right, top, cornerRadius, cornerPaint) // Top-right
                 canvas.drawCircle(right, bottom, cornerRadius, cornerPaint) // Bottom-right
                 canvas.drawCircle(left, bottom, cornerRadius, cornerPaint) // Bottom-left
+                deleteButtonX = right
+                deleteButtonY = top
+                canvas.drawCircle(
+                    deleteButtonX,
+                    deleteButtonY,
+                    deleteButtonRadius,
+                    deleteButtonPaint
+                )
             }
         }
 
@@ -109,7 +129,19 @@ class DrawCanvasView @JvmOverloads constructor(
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 if (isSelectionMode) {
+                    // O‘chirish tugmasiga bosishni tekshirish
                     selectedShape?.let { shape ->
+                        if (isPointInCircle(
+                                x,
+                                y,
+                                deleteButtonX,
+                                deleteButtonY,
+                                deleteButtonRadius
+                            )
+                        ) {
+                            deleteSelectedShape()
+                            return true
+                        }
                         resizingCorner = getCornerAtPoint(x, y, shape.bounds)
                         if (resizingCorner != null) return true
                         isDragging = shape.bounds.contains(x, y)
@@ -119,7 +151,7 @@ class DrawCanvasView @JvmOverloads constructor(
                             return true
                         }
                     }
-                    selectedShape = shapes.find { it.bounds.contains(x, y) }
+                    selectedShape = shapes.lastOrNull { it.bounds.contains(x, y) }
                     if (selectedShape != null) {
                         showCursor = false
                         clearPreviewCanvas()
@@ -226,9 +258,25 @@ class DrawCanvasView @JvmOverloads constructor(
         return null
     }
 
-    private fun isPointInCircle(x: Float, y: Float, cx: Float, cy: Float): Boolean {
+    private fun isPointInCircle(
+        x: Float,
+        y: Float,
+        cx: Float,
+        cy: Float,
+        radius: Float = cornerRadius
+    ): Boolean {
         val distance = kotlin.math.hypot((x - cx).toDouble(), (y - cy).toDouble()).toFloat()
-        return distance <= cornerRadius * 3 // Sezgirlikni oshirish
+        return distance <= radius * 2
+    }
+
+    private fun deleteSelectedShape() {
+        selectedShape?.let { shape ->
+            shapes.remove(shape)
+            selectedShape = null
+            bitmap?.eraseColor(Color.WHITE)
+            shapes.forEach { it.tool.onCommit(bitmapCanvas!!) }
+            invalidate()
+        }
     }
 
     fun setSelectionMode(enabled: Boolean) {

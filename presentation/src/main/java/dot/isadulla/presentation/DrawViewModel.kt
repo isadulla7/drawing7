@@ -10,18 +10,25 @@ import dot.isaulla.tools.ToolsFactory
 class DrawViewModel : ViewModel() {
     private val _drawState = MutableLiveData(DrawState())
     val drawState: LiveData<DrawState> = _drawState
-    private var _isSelectionMode = false
-    val isSelectionMode: Boolean get() = _isSelectionMode
-
-    fun setSelectionMode(enabled: Boolean) {
-        _isSelectionMode = enabled
+    private val _isSelectionMode = MutableLiveData(false) // LiveData qilindi
+    val isSelectionMode: LiveData<Boolean> = _isSelectionMode
+    private fun setSelectionMode(enabled: Boolean) {
+        _isSelectionMode.value = enabled
     }
+
     fun setToolType(toolType: ToolType) {
-        val newTool = ToolsFactory.createTool(toolType)
-        _drawState.value = _drawState.value?.copy(
-            currentToolType = toolType,
-            currentTool = newTool
-        )
+        if (toolType == ToolType.SELECTION) {
+            setSelectionMode(!(_isSelectionMode.value ?: false)) // Rejimni almashtirish
+        } else {
+            setSelectionMode(false) // Boshqa vositalar uchun tanlash rejimini o‘chirish
+            val newTool = ToolsFactory.createTool(toolType)
+            _drawState.value = newTool?.let {
+                _drawState.value?.copy(
+                    currentToolType = toolType,
+                    currentTool = it
+                )
+            }
+        }
     }
 
     fun setColor(color: Int) {
@@ -40,6 +47,7 @@ class DrawViewModel : ViewModel() {
             ToolUiModel(ToolType.FILL, "Fill Color", R.drawable.color),
             ToolUiModel(ToolType.LINE, "Line", R.drawable.line),
             ToolUiModel(ToolType.ERASER, "Eraser", R.drawable.eraser),
+            ToolUiModel(ToolType.SELECTION, "Selection", R.drawable.cursor),
         )
     }
 }

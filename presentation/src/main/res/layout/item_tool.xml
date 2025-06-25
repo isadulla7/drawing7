@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@drawable/default_tool_background">
 
     <ImageView
         android:id="@+id/toolIcon"
