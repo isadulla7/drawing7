@@ -1,11 +1,10 @@
-package dot.isadulla.presentation
+package dot.isaulla.tools
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.view.MotionEvent
-import dot.isaulla.tools.Tool
 import android.graphics.Color
 
 class EraserTool(
@@ -33,15 +32,23 @@ class EraserTool(
                 originalBounds.union(event.x, event.y)
                 canvas.drawPath(path, paint)
             }
+            MotionEvent.ACTION_UP -> {
+                path.lineTo(event.x, event.y)
+                originalBounds.union(event.x, event.y)
+            }
         }
     }
 
     override fun onCommit(canvas: Canvas) {
-        canvas.drawPath(path, paint)
+        canvas.drawPath(path, paint) // BitmapCanvas’da doimiy o‘chirish
     }
 
     override fun setColor(color: Int) {
         // O‘chirgich uchun rang o‘zgartirish kerak emas
+    }
+
+    override fun setFillColor(color: Int) {
+
     }
 
     override fun setStrokeWidth(width: Float) {
@@ -59,16 +66,15 @@ class EraserTool(
         // O‘chirgich uchun resize kerak emas
     }
 
+    override fun move(dx: Float, dy: Float) {
+        // O‘chirgich uchun move kerak emas
+    }
+
     override fun clone(): Tool {
         val newPaint = Paint().apply { set(paint) }
         return EraserTool(newPaint).apply {
             path = Path(this@EraserTool.path)
             originalBounds.set(this@EraserTool.originalBounds)
         }
-    }
-
-    override fun move(dx: Float, dy: Float) {
-        path.offset(dx, dy)
-        originalBounds.offset(dx, dy)
     }
 }

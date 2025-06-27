@@ -1,11 +1,5 @@
 package dot.isaulla.tools
 
 enum class ToolType {
-    PENCIL,
-    ERASER,
-    LINE,
-    RECTANGLE,
-    CIRCLE,
-    FILL,
-    SELECTION
+    SELECTION, PENCIL, ERASER, LINE, RECTANGLE, CIRCLE, FILL
 }

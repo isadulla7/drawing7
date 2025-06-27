@@ -1,6 +1,9 @@
 package dot.isadulla.dotpaint
 
+import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Bundle
+import android.widget.SeekBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,25 +28,51 @@ class MainActivity : AppCompatActivity() {
         viewModel.isSelectionMode.observe(this) { mode ->
             binding.drawCanvasView.setSelectionMode(mode)
         }
-
         val tools = viewModel.getToolUiList()
+        val adapter = ToolAdapter(tools, { selectedToolType ->
+            viewModel.setToolType(selectedToolType)
+        }, viewModel.isSelectionMode.value ?: false)
+
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerView.adapter = ToolAdapter(tools) { selectedToolType ->
-            viewModel.setToolType(selectedToolType)
+        binding.recyclerView.adapter = adapter
+
+        // isSelectionMode o‘zgarishini kuzatish
+        viewModel.isSelectionMode.observe(this) { mode ->
+            binding.drawCanvasView.setSelectionMode(mode)
+            adapter.notifyDataSetChanged() // UI yangilash
         }
 
-//        binding.changeMode.setOnClickListener {
-//            val newMode = !viewModel.isSelectionMode // viewModel orqali boshqarish
-//            viewModel.setSelectionMode(newMode)
-//            binding.drawCanvasView.setSelectionMode(newMode)
-//        }
-        // Namuna: Vosita tanlash tugmalari
-//        binding.btnPencil.setOnClickListener { viewModel.setToolType(ToolType.PENCIL) }
-//        binding.btnEraser.setOnClickListener { viewModel.setToolType(ToolType.ERASER) }
-//        binding.btnLine.setOnClickListener { viewModel.setToolType(ToolType.LINE) }
-//        binding.btnRectangle.setOnClickListener { viewModel.setToolType(ToolType.RECTANGLE) }
-//        binding.btnCircle.setOnClickListener { viewModel.setToolType(ToolType.CIRCLE) }
-//        binding.btnFill.setOnClickListener { viewModel.setToolType(ToolType.FILL) }
+        binding.fillColorButton.setOnClickListener {
+            showColorPicker { color -> viewModel.setFillColor(color) }
+        }
+        binding.strokeColorButton.setOnClickListener {
+            showColorPicker { color -> viewModel.setStrokeColor(color) }
+        }
+
+        // Stroke width tanlash
+        binding.strokeWidthSlider.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    val strokeWidth = progress.toFloat().coerceAtLeast(1f)
+                    viewModel.setStrokeWidth(strokeWidth)
+                    binding.drawCanvasView.setSelectedShapeStrokeWidth(strokeWidth) // Tanlangan shakl uchun
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+    }
+
+    private fun showColorPicker(onColorSelected: (Int) -> Unit) {
+        // Oddiy misol uchun, haqiqiy loyihada ColorPicker kutubxonasi ishlatiladi
+        val colors = intArrayOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.BLACK)
+        AlertDialog.Builder(this)
+            .setItems(colors.map { it.toString() }.toTypedArray()) { _, which ->
+                onColorSelected(colors[which])
+            }
+            .show()
     }
 }

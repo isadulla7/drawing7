@@ -10,44 +10,51 @@ import dot.isaulla.tools.ToolsFactory
 class DrawViewModel : ViewModel() {
     private val _drawState = MutableLiveData(DrawState())
     val drawState: LiveData<DrawState> = _drawState
-    private val _isSelectionMode = MutableLiveData(false) // LiveData qilindi
+    private val _isSelectionMode = MutableLiveData(false)
     val isSelectionMode: LiveData<Boolean> = _isSelectionMode
-    private fun setSelectionMode(enabled: Boolean) {
+
+    fun setSelectionMode(enabled: Boolean) {
         _isSelectionMode.value = enabled
     }
 
     fun setToolType(toolType: ToolType) {
         if (toolType == ToolType.SELECTION) {
-            setSelectionMode(!(_isSelectionMode.value ?: false)) // Rejimni almashtirish
+            setSelectionMode(true)
+            _drawState.postValue(_drawState.value)
         } else {
-            setSelectionMode(false) // Boshqa vositalar uchun tanlash rejimini o‘chirish
+            setSelectionMode(false)
             val newTool = ToolsFactory.createTool(toolType)
-            _drawState.value = newTool?.let {
-                _drawState.value?.copy(
-                    currentToolType = toolType,
-                    currentTool = it
-                )
-            }
+            _drawState.value = _drawState.value?.copy(
+                currentToolType = toolType,
+                currentTool = newTool
+            )
         }
     }
 
-    fun setColor(color: Int) {
-        _drawState.value = _drawState.value?.copy(currentColor = color)
+    fun setFillColor(color: Int) {
+        _drawState.value = _drawState.value?.copy(fillColor = color)
+        _drawState.value?.currentTool?.setFillColor(color)
+    }
+
+    fun setStrokeColor(color: Int) {
+        _drawState.value = _drawState.value?.copy(strokeColor = color)
+        _drawState.value?.currentTool?.setColor(color)
     }
 
     fun setStrokeWidth(width: Float) {
         _drawState.value = _drawState.value?.copy(strokeWidth = width)
+        _drawState.value?.currentTool?.setStrokeWidth(width)
     }
 
     fun getToolUiList(): List<ToolUiModel> {
         return listOf(
+            ToolUiModel(ToolType.SELECTION, "Selection", R.drawable.cursor),
             ToolUiModel(ToolType.PENCIL, "Pencil", R.drawable.pen),
             ToolUiModel(ToolType.CIRCLE, "Circle", R.drawable.circle),
             ToolUiModel(ToolType.RECTANGLE, "Rectangle", R.drawable.rectangle),
             ToolUiModel(ToolType.FILL, "Fill Color", R.drawable.color),
             ToolUiModel(ToolType.LINE, "Line", R.drawable.line),
-            ToolUiModel(ToolType.ERASER, "Eraser", R.drawable.eraser),
-            ToolUiModel(ToolType.SELECTION, "Selection", R.drawable.cursor),
+            ToolUiModel(ToolType.ERASER, "Eraser", R.drawable.eraser)
         )
     }
 }

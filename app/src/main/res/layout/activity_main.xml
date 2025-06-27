@@ -14,6 +14,39 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/btn_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/fillColorButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fill Color" />
+
+        <Button
+            android:id="@+id/strokeColorButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stroke Color" />
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/strokeWidthSlider"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:max="50"
+        android:progress="5"
+        app:layout_constraintEnd_toEndOf="@id/btn_layout"
+        app:layout_constraintStart_toStartOf="@id/btn_layout"
+        app:layout_constraintTop_toBottomOf="@id/btn_layout" />
+
+    <LinearLayout
         android:id="@+id/buttonContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

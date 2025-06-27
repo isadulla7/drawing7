@@ -31,6 +31,10 @@ class FillTool(
         paint.color = color
     }
 
+    override fun setFillColor(color: Int) {
+
+    }
+
     override fun setStrokeWidth(width: Float) {
         // FillTool uchun qalinlik kerak emas
     }

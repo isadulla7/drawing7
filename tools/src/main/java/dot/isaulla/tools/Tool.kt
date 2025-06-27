@@ -7,10 +7,11 @@ import android.view.MotionEvent
 interface Tool {
     fun onPreview(event: MotionEvent, canvas: Canvas)
     fun onCommit(canvas: Canvas)
-    fun setColor(color: Int) {}
-    fun setStrokeWidth(width: Float) {}
+    fun setColor(color: Int) // Tashqi rang
+    fun setFillColor(color: Int) // Ichki rang
+    fun setStrokeWidth(width: Float)
     fun getBounds(): RectF
     fun resize(newBounds: RectF)
-    fun clone(): Tool
     fun move(dx: Float, dy: Float)
+    fun clone(): Tool
 }

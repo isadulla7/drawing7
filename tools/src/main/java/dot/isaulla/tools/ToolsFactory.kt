@@ -1,7 +1,6 @@
 package dot.isaulla.tools
 
-import dot.isadulla.presentation.CircleTool
-import dot.isadulla.presentation.EraserTool
+import CircleTool
 import dot.isadulla.presentation.FillTool
 import dot.isadulla.presentation.PencilTool
 import dot.isadulla.presentation.RectangleTool

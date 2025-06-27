@@ -11,7 +11,9 @@ import dot.isadulla.presentation.ToolUiModel
 import dot.isaulla.tools.ToolType
 
 class ToolAdapter(
-    private val tools: List<ToolUiModel>, private val onToolSelected: (ToolType) -> Unit
+    private val tools: List<ToolUiModel>,
+    private val onToolSelected: (ToolType) -> Unit,
+    private val isSelectionMode: Boolean // Rejim holatini qo‘shish
 ) : RecyclerView.Adapter<ToolAdapter.ToolViewHolder>() {
     private var selectedToolType: ToolType? = null // Tanlangan tool
 
@@ -31,8 +33,10 @@ class ToolAdapter(
         holder.name.text = tool.name
 
         holder.view.setBackgroundResource(
-            if (tool.type == selectedToolType) R.drawable.selected_tool_background
-            else R.drawable.default_tool_background
+            if (tool.type == ToolType.SELECTION && isSelectionMode || tool.type == selectedToolType && !isSelectionMode)
+                R.drawable.selected_tool_background
+            else
+                R.drawable.default_tool_background
         )
 
         holder.view.setOnClickListener {
